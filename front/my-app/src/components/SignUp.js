@@ -4,24 +4,80 @@ class SignUp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: ""
+      email: "",
+      password: "",
+      verifyPassword: "",
+      name: "",
+      lastName: ""
     };
     this.updateEmailField = this.updateEmailField.bind(this);
+    this.updatePasswordField = this.updatePasswordField.bind(this);
+    this.updateVerifyPasswordField = this.updateVerifyPasswordField.bind(this);
+    this.updateNameField = this.updateNameField.bind(this);
+    this.updateLastNameField = this.updateLastNameField.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   updateEmailField(event) {
     this.setState({ email: event.target.value });
   }
+  updatePasswordField(event) {
+    this.setState({ password: event.target.value });
+  }
+  updateVerifyPasswordField(event) {
+    this.setState({ verifyPassword: event.target.value });
+  }
+  updateNameField(event) {
+    this.setState({ name: event.target.value });
+  }
+
+  updateLastNameField(event) {
+    this.setState({ lastName: event.target.value });
+  }
+
+  handleSubmit(event) {
+    console.log(`Form submitted: ${JSON.stringify(this.state)}`);
+    event.preventDefault();
+  }
 
   render() {
     return (
       <React.Fragment>
-        <h1>{this.state.email}</h1>
-        <input
-          type="email"
-          name={this.state.email}
-          onChange={this.updateEmailField}
-        />
+        <h1>{JSON.stringify(this.state)}</h1>
+        <form onSubmit={this.handleSubmit}>
+          <input
+            type="email"
+            name="email"
+            value={this.state.email}
+            onChange={this.updateEmailField}
+          />
+          <input
+            type="text"
+            name="password"
+            value={this.state.password}
+            onChange={this.updatePasswordField}
+          />
+          <input
+            type="text"
+            name="verifyPassword"
+            value={this.state.verifyPassword}
+            onChange={this.updateVerifyPasswordField}
+          />
+          <input
+            type="text"
+            name="name"
+            value={this.state.name}
+            onChange={this.updateNameField}
+          />
+          <input
+            type="text"
+            name="lastName"
+            value={this.state.lastName}
+            onChange={this.updateLastNameField}
+          />
+
+          <input type="submit" value="Submit" />
+        </form>
       </React.Fragment>
     );
   }
