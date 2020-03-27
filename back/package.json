@@ -4,12 +4,19 @@
   "description": "Wild server",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js"
+    "client": "cd front && yarn start",
+    "start": "nodemon app.js",
+    "dev": "concurrently --kill-others-on-fail \"yarn back\" \"yarn front\""
   },
   "author": "wilder",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.17.1",
-    "morgan": "^1.9.0"
+    "morgan": "^1.9.0",
+    "mysql": "^2.18.1",
+    "connect-flash": "^0.1.1"
+  },
+  "devDependencies": {
+    "concurrently": "^4.0.1"
   }
 }
