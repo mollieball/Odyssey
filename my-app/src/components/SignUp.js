@@ -118,6 +118,13 @@ class SignUp extends React.Component {
             >
               Submit
             </Button>
+            {/* <Snackbar
+              anchorOrigin={{ vertical, horizontal }}
+              open={this.state.open}
+              onClose={this.handleClose}
+              ContentProps={{ "aria-describedby": "message-id" }}
+              message={<span id="message-id">{this.state.flash}</span>}
+            /> */}
           </div>
         </form>
         {this.state.flash ? (
