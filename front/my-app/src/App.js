@@ -1,9 +1,13 @@
 import React from "react";
 import SignUp from "./components/SignUp";
-import "./App.css";
+import SignIn from "./components/SignIn";
+import Profile from "./components/Profile";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import { ThemeProvider as MuiThemeProvider } from "@material-ui/core/styles";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import "./App.css";
+
 function App() {
   return (
     <div className="App">
@@ -16,7 +20,22 @@ function App() {
                   <img src="http://images.innoveduc.fr/react_odyssey_homer/wildhomer.png" />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <SignUp />
+                  <Router>
+                    <Switch>
+                      <Route exact path="/">
+                        <SignIn />
+                      </Route>
+                      <Route path="/signin">
+                        <SignIn />
+                      </Route>
+                      <Route path="/signup">
+                        <SignUp />
+                      </Route>
+                      <Route path="/profile">
+                        <Profile />
+                      </Route>
+                    </Switch>
+                  </Router>
                 </Grid>
               </Grid>
             </Paper>

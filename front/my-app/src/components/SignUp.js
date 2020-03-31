@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import "./SignUp.css";
+import { Redirect, Link } from "react-router-dom";
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -13,7 +13,8 @@ class SignUp extends React.Component {
       verifyPassword: "",
       name: "",
       lastName: "",
-      flash: ""
+      flash: "",
+      signup: false
     };
 
     this.updateEmailField = this.updateEmailField.bind(this);
@@ -43,6 +44,7 @@ class SignUp extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
+
     fetch("/auth/signup", {
       method: "POST",
       headers: new Headers({
@@ -53,11 +55,14 @@ class SignUp extends React.Component {
       .then(res => res.json())
       .then(res => this.setState({ flash: res.flash }))
       .catch(err => this.setState({ flash: err.flash }));
-    this.setState({ open: false });
     console.log("form submitted");
+    this.setState({ signup: true });
   };
 
   render() {
+    if (this.state.signup === true) {
+      return <Redirect to="/" />;
+    }
     return (
       <div className="signup">
         <h1>Sign Up!</h1>
@@ -117,6 +122,9 @@ class SignUp extends React.Component {
               onClick={this.handleSubmit}
             >
               Submit
+            </Button>
+            <Button variant="outlined" color="secondary">
+              <Link to="/signin">Sign In!</Link>
             </Button>
           </div>
         </form>
