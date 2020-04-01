@@ -8,7 +8,6 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 app.use("/auth", authRouter);
-
 app.use(morgan("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
