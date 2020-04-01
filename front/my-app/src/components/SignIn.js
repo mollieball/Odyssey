@@ -27,7 +27,28 @@ class SignIn extends React.Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.setState({ login: true });
+    const user = {
+      email: this.state.email,
+      password: this.state.password
+    };
+    fetch("/auth/signin", {
+      method: "POST",
+      headers: new Headers({
+        "Content-Type": "application/json"
+      }),
+      body: JSON.stringify(user)
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.hasOwnProperty("user")) {
+          this.setState({ login: true });
+          console.log(data.token);
+        } else {
+          this.setState({ flash: data.message });
+          console.log(this.state.flash);
+        }
+      })
+      .catch(err => this.setState({ flash: err.flash }));
   };
 
   render() {
@@ -37,7 +58,12 @@ class SignIn extends React.Component {
     return (
       <div className="sign_in">
         <h1>Sign In!</h1>
-        <form onSubmit={this.handleSubmit} className="sign_in_form">
+        <form
+          onSubmit={this.handleSubmit}
+          className="sign_in_form"
+          action="/signin"
+          method="post"
+        >
           <div>
             <TextField
               type="email"
