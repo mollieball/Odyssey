@@ -17,7 +17,10 @@ function App() {
             <Paper elevation={4} style={{ margin: 32 }}>
               <Grid container alignItems="center" justify="center">
                 <Grid item xs={12} sm={6} style={{ "text-align": "center" }}>
-                  <img src="http://images.innoveduc.fr/react_odyssey_homer/wildhomer.png" />
+                  <img
+                    src="http://images.innoveduc.fr/react_odyssey_homer/wildhomer.png"
+                    alt=""
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Router>
