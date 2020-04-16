@@ -1,0 +1,49 @@
+require("dotenv").config();
+const bcrypt = require("bcrypt");
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const JwtStrategy = require("passport-jwt").Strategy;
+const ExtractJwt = require("passport-jwt").ExtractJwt;
+const db = require("../database/configs");
+const User = db.user;
+const { ACCESS_TOKEN_SECRET } = process.env;
+
+//passport strategy
+passport.use(
+  new LocalStrategy(
+    {
+      usernameField: "email",
+      passwordField: "password",
+      session: false,
+    },
+    (email, password, done) => {
+      User.findOne({ where: { email: email } })
+        .then((foundUser) => {
+          !foundUser &&
+            done(null, false, { message: "Can't find a user with this email" });
+
+          bcrypt
+            .compare(password, foundUser.password)
+            .then((isUser) => isUser && done(null, foundUser.dataValues))
+            .catch((compareErr) =>
+              console.error(`Compare Error: ${compareErr}`)
+            );
+        })
+        .catch((queryError) => console.error(`Query Error: ${queryError}`));
+    }
+  )
+);
+
+passport.use(
+  new JwtStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: ACCESS_TOKEN_SECRET,
+    },
+    (jwtPayload, done) => {
+      User.findOne({ where: { email: jwtPayload.email } })
+        .then((user) => done(null, user.dataValues))
+        .catch((jwtErr) => console.error(`JWT Error: ${jwtErr}`));
+    }
+  )
+);

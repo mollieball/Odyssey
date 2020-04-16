@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import SnackbarContent from "@material-ui/core/SnackbarContent";
-import { Redirect, Link } from "react-router-dom";
+import { withRouter, Link, Redirect } from "react-router-dom";
 
 class SignUp extends React.Component {
   constructor(props) {
@@ -11,16 +11,15 @@ class SignUp extends React.Component {
       email: "",
       password: "",
       verifyPassword: "",
-      name: "",
+      firstName: "",
       lastName: "",
       flash: "",
-      signup: false
     };
 
     this.updateEmailField = this.updateEmailField.bind(this);
     this.updatePasswordField = this.updatePasswordField.bind(this);
     this.updateVerifyPasswordField = this.updateVerifyPasswordField.bind(this);
-    this.updateNameField = this.updateNameField.bind(this);
+    this.updatefirstNameField = this.updatefirstNameField.bind(this);
     this.updateLastNameField = this.updateLastNameField.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -34,35 +33,46 @@ class SignUp extends React.Component {
   updateVerifyPasswordField(event) {
     this.setState({ verifyPassword: event.target.value });
   }
-  updateNameField(event) {
-    this.setState({ name: event.target.value });
+  updatefirstNameField(event) {
+    this.setState({ firstName: event.target.value });
   }
 
   updateLastNameField(event) {
     this.setState({ lastName: event.target.value });
   }
 
-  handleSubmit = e => {
+  isEmpty = (object) => {
+    return !Object.values(object).some((x) => x !== null && x !== "");
+  };
+  handleSubmit = (e) => {
     e.preventDefault();
-
-    fetch("/auth/signup", {
+    const user = {
+      email: this.state.email,
+      password: this.state.password,
+      verifyPassword: this.state.verifyPassword,
+      firstName: this.state.firstName,
+      lastName: this.state.lastName,
+    };
+    if (this.isEmpty(user)) {
+      console.log("form is empty");
+      return <Redirect to="/signup" />;
+    }
+    fetch("/signup", {
       method: "POST",
       headers: new Headers({
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       }),
-      body: JSON.stringify(this.state)
+      body: JSON.stringify(user),
     })
-      .then(res => res.json())
-      .then(res => this.setState({ flash: res.flash }))
-      .catch(err => this.setState({ flash: err.flash }));
-    console.log("form submitted");
-    this.setState({ signup: true });
+      .then((res) => res.json())
+      .then((res) => {
+        this.setState({ flash: res.flash });
+        this.props.history.push("/signin");
+      })
+      .catch((err) => this.setState({ flash: err.flash }));
   };
 
   render() {
-    if (this.state.signup === true) {
-      return <Redirect to="/" />;
-    }
     return (
       <div className="signup">
         <h1>Sign Up!</h1>
@@ -97,10 +107,10 @@ class SignUp extends React.Component {
           <div>
             <TextField
               type="text"
-              label="Name"
-              name="name"
-              value={this.state.name}
-              onChange={this.updateNameField}
+              label="First Name"
+              name="firstName"
+              value={this.state.firstName}
+              onChange={this.updatefirstNameField}
             />
           </div>
 
@@ -139,4 +149,4 @@ class SignUp extends React.Component {
   }
 }
 
-export default SignUp;
+export default withRouter(SignUp);
