@@ -1,7 +1,9 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import { Link, Redirect } from "react-router-dom";
+import SnackbarContent from "@material-ui/core/SnackbarContent";
+import { Link, Redirect, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
 
 class SignIn extends React.Component {
   constructor(props) {
@@ -9,7 +11,8 @@ class SignIn extends React.Component {
     this.state = {
       email: "",
       password: "",
-      login: false
+      login: false,
+      flash: "",
     };
 
     this.updateEmailField = this.updateEmailField.bind(this);
@@ -25,30 +28,35 @@ class SignIn extends React.Component {
     this.setState({ password: event.target.value });
   }
 
-  handleSubmit = e => {
+  handleSubmit = (e) => {
     e.preventDefault();
     const user = {
       email: this.state.email,
-      password: this.state.password
+      password: this.state.password,
     };
-    fetch("/auth/signin", {
+    fetch("/signin", {
       method: "POST",
       headers: new Headers({
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       }),
-      body: JSON.stringify(user)
+      body: JSON.stringify(user),
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.hasOwnProperty("user")) {
-          this.setState({ login: true });
-          console.log(data.token);
+          this.props.dispatch({
+            type: "CREATE_SESSION",
+            user: data.user,
+            token: data.token,
+            message: data.message,
+          });
+          this.setState({ login: true, message: this.state.flash });
         } else {
           this.setState({ flash: data.message });
           console.log(this.state.flash);
         }
       })
-      .catch(err => this.setState({ flash: err.flash }));
+      .catch((err) => this.setState({ flash: err.flash }));
   };
 
   render() {
@@ -58,12 +66,8 @@ class SignIn extends React.Component {
     return (
       <div className="sign_in">
         <h1>Sign In!</h1>
-        <form
-          onSubmit={this.handleSubmit}
-          className="sign_in_form"
-          action="/signin"
-          method="post"
-        >
+
+        <form onSubmit={this.handleSubmit} className="sign_in_form">
           <div>
             <TextField
               type="email"
@@ -98,9 +102,20 @@ class SignIn extends React.Component {
             </Button>
           </div>
         </form>
+        {this.state.flash ? (
+          <SnackbarContent
+            anchororigin={"bottom, center"}
+            message={this.state.flash}
+          />
+        ) : null}
       </div>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    flash: state.auth.token,
+  };
+};
 
-export default SignIn;
+export default connect(mapStateToProps)(withRouter(SignIn));
