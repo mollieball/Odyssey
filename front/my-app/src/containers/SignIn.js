@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
+// import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { Link, Redirect, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 
@@ -45,7 +45,7 @@ class SignIn extends React.Component {
       .then((data) => {
         if (data.hasOwnProperty("user")) {
           this.props.dispatch({
-            type: "CREATE_SESSION",
+            type: "TOGGLE_SESSION",
             user: data.user,
             token: data.token,
             message: data.message,
@@ -102,12 +102,12 @@ class SignIn extends React.Component {
             </Button>
           </div>
         </form>
-        {this.state.flash ? (
+        {/* {this.state.flash ? (
           <SnackbarContent
             anchororigin={"bottom, center"}
             message={this.state.flash}
           />
-        ) : null}
+        ) : null} */}
       </div>
     );
   }

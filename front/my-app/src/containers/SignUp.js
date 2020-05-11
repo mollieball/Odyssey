@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
-import SnackbarContent from "@material-ui/core/SnackbarContent";
+// import SnackbarContent from "@material-ui/core/SnackbarContent";
 import { withRouter, Link, Redirect } from "react-router-dom";
 
 class SignUp extends React.Component {
@@ -138,12 +138,12 @@ class SignUp extends React.Component {
             </Button>
           </div>
         </form>
-        {this.state.flash ? (
+        {/* {this.state.flash ? (
           <SnackbarContent
             anchorOrigin={"bottom, center"}
             message={this.state.flash}
           />
-        ) : null}
+        ) : null} */}
       </div>
     );
   }

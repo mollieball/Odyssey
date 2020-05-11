@@ -13,13 +13,13 @@ class Profile extends React.Component {
     this.state = {
       profile: {
         email: "",
-        name: "",
-        lastname: "",
+        firstName: "",
+        lastName: "",
       },
       signin: false,
     };
 
-    // this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount = () => {
@@ -45,6 +45,10 @@ class Profile extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     this.setState({ signin: true });
+    this.props.dispatch({
+      type: "TOGGLE_SESSION",
+      token: "",
+    });
   };
 
   render() {
@@ -53,26 +57,30 @@ class Profile extends React.Component {
     }
     return (
       <div className="profile">
-        <h1>Welcome {this.state.profile.name}</h1>
-        <List>
-          <ListItem>
-            <ListItemText primary={this.state.profile.email} />
-          </ListItem>
-          <ListItem>
-            <ListItemText primary={this.state.profile.name} />
-          </ListItem>
-          <ListItem>
-            <ListItemText primary={this.state.profile.lastname} />
-          </ListItem>
-        </List>
-        <Button
-          variant="outlined"
-          color="secondary"
-          value="submit"
-          onClick={this.handleSubmit}
-        >
-          Sign Out!
-        </Button>
+        <div>
+          <h1>Welcome {this.state.profile.name}</h1>
+          <List>
+            <ListItem>
+              <ListItemText primary={this.state.profile.email} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary={this.state.profile.name} />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary={this.state.profile.lastname} />
+            </ListItem>
+          </List>
+        </div>
+        <div>
+          <Button
+            variant="outlined"
+            color="secondary"
+            value="submit"
+            onClick={this.handleSubmit}
+          >
+            Sign Out!
+          </Button>
+        </div>
       </div>
     );
   }
