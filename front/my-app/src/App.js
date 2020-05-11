@@ -37,6 +37,7 @@ function App() {
                   <Route path="/signup" component={NotAuthentication(SignUp)} />
                   <Route path="/profile" component={Authentication(Profile)} />
                 </Switch>
+                <PopUp />
               </Grid>
             </Grid>
           </Paper>
